@@ -16,10 +16,10 @@ BEGIN
     BEGIN
         SET @drop_result = 'Database did not exist. Nothing to delete.';
     END;
+    SET @dummy = (SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = 'hbtn_0c_0');
     DROP DATABASE hbtn_0c_0;
     SET @drop_result = 'Database has been deleted.';
 END;
 
 -- Print the result message
-SET GLOBAL general_log = 0;
-SET @drop_result AS Message;
+SET @drop_result;
