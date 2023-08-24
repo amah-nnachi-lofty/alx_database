@@ -12,10 +12,14 @@ DROP DATABASE IF EXISTS hbtn_0c_0;
 
 -- Attempt to drop the database again and store the result in the variable
 BEGIN
-    DECLARE CONTINUE HANDLER FOR SQLSTATE '42000' SET @drop_result = 'Database did not exist. Nothing to delete.';
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SET @drop_result = 'Database did not exist. Nothing to delete.';
+    END;
     DROP DATABASE hbtn_0c_0;
     SET @drop_result = 'Database has been deleted.';
 END;
 
 -- Print the result message
-SELECT @drop_result AS Message;
+SET GLOBAL general_log = 0;
+SET @drop_result AS Message;
