@@ -3,26 +3,19 @@
 -- Set the name of the database you want to delete
 SET @db_name = 'hbtn_0c_0';
 
--- Check if the database exists
--- Query the information_schema.schemata table to determine if the database exists
-SELECT 1 INTO @db_exists FROM information_schema.schemata WHERE schema_name = @db_name;
+-- Create a temporary variable to hold the result of DROP DATABASE
+SET @drop_result = '';
 
--- Drop the database if it exists
--- If the database exists (indicated by @db_exists = 1), proceed with deletion
-IF @db_exists = 1 THEN
-    -- Temporarily disable foreign key checks to prevent potential issues during deletion
-    SET FOREIGN_KEY_CHECKS = 0;
-    
-    -- Drop the database
+-- Attempt to drop the database if it exists
+-- The DROP DATABASE statement will fail if the database does not exist
+DROP DATABASE IF EXISTS hbtn_0c_0;
+
+-- Attempt to drop the database again and store the result in the variable
+BEGIN
+    DECLARE CONTINUE HANDLER FOR SQLSTATE '42000' SET @drop_result = 'Database did not exist. Nothing to delete.';
     DROP DATABASE hbtn_0c_0;
-    
-    -- Re-enable foreign key checks
-    SET FOREIGN_KEY_CHECKS = 1;
-    
-    -- Print a message indicating that the database has been deleted
-    SELECT CONCAT('Database ', @db_name, ' has been deleted.') AS Message;
-    
--- If the database doesn't exist, print a message indicating that there's nothing to delete
-ELSE
-    SELECT CONCAT('Database ', @db_name, ' does not exist. Nothing to delete.') AS Message;
-END IF;
+    SET @drop_result = 'Database has been deleted.';
+END;
+
+-- Print the result message
+SELECT @drop_result AS Message;
