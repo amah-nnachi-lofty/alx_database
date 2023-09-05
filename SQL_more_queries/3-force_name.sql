@@ -9,7 +9,6 @@
     -- If the table force_name already exists, your script should not fail
 
 CREATE TABLE IF NOT EXISTS force_name (
-  id INT NOT NULL AUTO_INCREMENT,
-  name VARCHAR(256) NOT NULL,
-  PRIMARY KEY (id)
-);
+    id INT,
+    name VARCHAR(256) NOT NULL,
+    );
